@@ -116,6 +116,7 @@ public class Lista {
             } else {
                 anterior.enlace = actual.enlace;
             }
+            //throw new Out
             actual = null; // no es necesario al ser una variable local
         }
     }
