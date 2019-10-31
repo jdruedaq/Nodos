@@ -9,17 +9,17 @@ package cuatro;/*
  */
 public class Nodo {
 
-    int dato;
+    Seat dato;
     Nodo adelante;
     Nodo atras;
 
-    public Nodo(int entrada) {
+    public Nodo(Seat entrada) {
         dato = entrada;
         adelante = null;
         atras = null;
     }
 
-    public int getDato() {
+    public Seat getDato() {
         return dato;
     }
 }

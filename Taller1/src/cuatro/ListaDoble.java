@@ -7,14 +7,16 @@ package cuatro;/*
 import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
 
+import javax.swing.*;
+
 /**
  * @author sigacdev
  */
 class ListaDoble {
 
-    Nodo cabeza;
+    private Nodo cabeza;
 
-    void insertarCabezaLista(int entrada) {
+    void insertarCabezaLista(Seat entrada) {
         Nodo nuevo;
         nuevo = new Nodo(entrada);
         nuevo.adelante = cabeza;
@@ -24,7 +26,7 @@ class ListaDoble {
         cabeza = nuevo;
     }
 
-    void insertarFinLista(int entrada) {
+    void insertarFinLista(Seat entrada) {
         Nodo nuevo = new Nodo(entrada);
         Nodo actual = cabeza;
         while (actual != null) {
@@ -37,7 +39,7 @@ class ListaDoble {
         }
     }
 
-    void insertaDespues(Nodo anterior, int entrada) {
+    void insertaDespues(Nodo anterior, Seat entrada) {
         Nodo nuevo;
         nuevo = new Nodo(entrada);
         nuevo.adelante = anterior.adelante;
@@ -48,7 +50,7 @@ class ListaDoble {
         nuevo.atras = anterior;
     }
 
-    void insertaAntes(Nodo adelante, int entrada) {
+    void insertaAntes(Nodo adelante, Seat entrada) {
         Nodo nuevo;
         nuevo = new Nodo(entrada);
         nuevo.atras = adelante.atras;
@@ -59,7 +61,7 @@ class ListaDoble {
         nuevo.adelante = adelante;
     }
 
-    void eliminar(int entrada) {
+    void eliminar(Seat entrada) {
         Nodo actual;
         boolean encontrado = false;
         actual = cabeza;
@@ -97,7 +99,7 @@ class ListaDoble {
         int k = 0;
         n = cabeza;
         while (n != null) {
-            System.out.print(n.dato + " ---> ");
+            System.out.println(n.dato.toString());
             n = n.adelante;
             k++;
         }
@@ -105,7 +107,7 @@ class ListaDoble {
     }
 
     @Nullable
-    Nodo buscarLista(@NotNull int destino, @NotNull boolean print) {
+    Nodo buscarLista(@NotNull int destino, @NotNull boolean print, boolean delete) {
         Nodo actual;
         boolean encontrado = false;
         actual = cabeza;
@@ -113,15 +115,15 @@ class ListaDoble {
         while ((actual != null) && (!encontrado)) {
             /* la comparación se realiza con el método equals()...,
             depende del tipo Elemento */
-            encontrado = (actual.dato == destino);
+            encontrado = (actual.dato.getSeatNumber() == destino);
             if (!encontrado) {
                 actual = actual.adelante;
             }
         }
         // Enlace de nodo anterior con el siguiente
         if (actual != null) {
-            int last = 0;
-            int next = 0;
+            Seat last = null;
+            Seat next = null;
             try {
                 last = actual.atras.dato;
             } catch (NullPointerException ignore) {
@@ -132,17 +134,75 @@ class ListaDoble {
             } catch (NullPointerException ignore) {
                 System.out.println("El siguiente es nulo, se mostrará 0 por defecto");
             }
+
+            if (!delete) {
+                if (actual.dato.getName() == null) {
+                    actual.dato.setName(JOptionPane.showInputDialog("Ingrese su nombre para reservar el puesto Nº" + actual.dato.getSeatNumber()));
+                } else {
+                    JOptionPane.showMessageDialog(null, "El puesto Nº" + actual.dato.getSeatNumber() +
+                            " Se encuentra reservado para " + actual.dato.getName());
+                }
+            } else {
+                actual.dato.setName(null);
+            }
+
             if (print) {
-                System.out.println("+----------+----------+-----------+");
-                System.out.println("| anterior |  actual  | siguiente |");
-                System.out.println("+----------+----------+-----------+");
-                System.out.println(String.format("|   %4d   |   %4d   |   %4d    |", last, actual.dato, next));
-                System.out.println("+----------+----------+-----------+");
+                System.out.println(actual.dato.toString());
             }
             return actual;
         }
-        System.out.println("El " + destino + " no existe");
+        JOptionPane.showMessageDialog(null, "El asiento " + destino + " no existe");
         return null;
     }
 
+    @Nullable
+    Nodo buscarLista(@NotNull String destino, @NotNull boolean print, boolean delete) {
+        Nodo actual;
+        boolean encontrado = false;
+        actual = cabeza;
+        // Bucle de búsqueda
+        while ((actual != null) && (!encontrado)) {
+            /* la comparación se realiza con el método equals()...,
+            depende del tipo Elemento */
+            if (actual.dato.getName() != null) {
+                encontrado = (actual.dato.getName().equals(destino));
+            }
+            if (!encontrado) {
+                actual = actual.adelante;
+            }
+        }
+        // Enlace de nodo anterior con el siguiente
+        if (actual != null) {
+            Seat last = null;
+            Seat next = null;
+            try {
+                last = actual.atras.dato;
+            } catch (NullPointerException ignore) {
+                System.out.println("El anterior es nulo, se mostrará 0 por defecto");
+            }
+            try {
+                next = actual.adelante.dato;
+            } catch (NullPointerException ignore) {
+                System.out.println("El siguiente es nulo, se mostrará 0 por defecto");
+            }
+
+            if (!delete) {
+                if (actual.dato.getName() == null) {
+                    actual.dato.setName(JOptionPane.showInputDialog("Ingrese su nombre para reservar el puesto Nº" + actual.dato.getSeatNumber()));
+                } else {
+                    JOptionPane.showMessageDialog(null, "El puesto Nº" + actual.dato.getSeatNumber() +
+                            " Se encuentra reservado para " + actual.dato.getName());
+                }
+            } else {
+                actual.dato.setName(null);
+            }
+
+            if (print) {
+                System.out.println(actual.dato.toString());
+            }
+            return actual;
+        }
+        JOptionPane.showMessageDialog(null, "El asiento " + destino + " no existe");
+        return null;
+    }
 }
