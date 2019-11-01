@@ -3,16 +3,14 @@ package tres;
 public class Alumno {
     public static final int MEN = 0;
     public static final int FEMALE = 1;
-    private long dni;
     private String name;
     private int age;
     private int gender;
 
-    public Alumno(long dni, String name, int age, @IntRange(minimo = 0, maximo = 1) int gender) {
+    public Alumno(String name, int age, @IntRange(minimo = 0, maximo = 1) int gender) {
         if (gender > 1) {
             return;
         }
-        this.dni = dni;
         this.name = name;
         this.age = age;
         this.gender = gender;
@@ -42,11 +40,18 @@ public class Alumno {
         this.gender = gender;
     }
 
-    public long getDni() {
-        return dni;
-    }
-
-    public void setDni(long dni) {
-        this.dni = dni;
+    @Override
+    public String toString() {
+        String g;
+        if (gender == FEMALE) {
+            g = "Mujer";
+        } else {
+            g = "Hombre";
+        }
+        return "Alumno{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                ", gender=" + g +
+                '}';
     }
 }

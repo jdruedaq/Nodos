@@ -70,11 +70,22 @@ public class Lista {
         int k = 0;
         n = primero;
         while (n != null) {
-            System.out.print(n.dato + " --->");
+            System.out.print(n.dato.toString() + " --->");
             n = n.enlace;
             k++;
         }
         System.out.println();
+    }
+
+    public ListaOrdenada toSexList() {
+        NodoEstudiante n;
+        n = primero;
+        ListaOrdenada l = new ListaOrdenada();
+        while (n != null) {
+            l.insertaOrdenSexo(n.dato);
+            n = n.enlace;
+        }
+        return l;
     }
 
     public NodoEstudiante buscarPosicion(int posicion) {
@@ -91,7 +102,7 @@ public class Lista {
         return indice;
     }
 
-    public void eliminar(long entrada) {
+    public void eliminar(String entrada) {
         NodoEstudiante actual, anterior;
         boolean encontrado;
 //inicializa los apuntadores
@@ -100,7 +111,7 @@ public class Lista {
         encontrado = false;
 // búsqueda del nodo y del anterior
         while ((actual != null) && (!encontrado)) {
-            encontrado = (actual.dato.getDni() == entrada);
+            encontrado = (actual.dato.getName().equals(entrada));
             //con objetos: actual.dato.equals(entrada)
             if (!encontrado) {
                 anterior = actual;
